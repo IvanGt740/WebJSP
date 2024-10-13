@@ -41,29 +41,45 @@ public class sr_empleado extends HttpServlet {
             out.println("<body>");
            
             
-            if("agregar".equals(request.getParameter("btn_agregar"))){
-                
-                empleado = new Empleado(request.getParameter("txt_codigo"),Integer.valueOf(request.getParameter("drop_puesto")),0,request.getParameter("txt_nombres"),request.getParameter("txt_apellidos"),request.getParameter("txt_direccion"),request.getParameter("txt_telefono"),request.getParameter("txt_fn"));
-
-                if(empleado.agregar()>0){
-                    response.sendRedirect("index.jsp");
-                }else{
-                    out.println("<h1>Error............</h1>");
-                    out.println("<a href = 'index.jsp'>Regresar</a>");
-
-                }
-        
-            }
-                
-                
+             empleado = new Empleado(request.getParameter("txt_codigo"),Integer.valueOf(request.getParameter("drop_puesto")),Integer.valueOf(request.getParameter("txt_id")),request.getParameter("txt_nombres"),request.getParameter("txt_apellidos"),request.getParameter("txt_direccion"),request.getParameter("txt_telefono"),request.getParameter("txt_fn"));
+            // Boton agregar 
+            if ("agregar".equals(request.getParameter("btn_agregar"))){
+             if (empleado.agregar()>0){
+             response.sendRedirect("index.jsp");
+             
+             }else{
+             out.println("<h1> xxxxxxx No se Ingreso xxxxxxxxxxxx </h1>");
+             out.println("<a href='index.jsp'>Regresar...</a>");
+             }
+             }
             
+            // Boton modificar 
+            if ("modificar".equals(request.getParameter("btn_modificar"))){
+             if (empleado.modificar()>0){
+             response.sendRedirect("index.jsp");
+             
+             }else{
+             out.println("<h1> xxxxxxx No se Modifico xxxxxxxxxxxx </h1>");
+             out.println("<a href='index.jsp'>Regresar...</a>");
+             }
+             }
+            
+            // Boton eliminar 
+            if ("eliminar".equals(request.getParameter("btn_eliminar"))){
+             if (empleado.eliminar()>0){
+             response.sendRedirect("index.jsp");
+             
+             }else{
+             out.println("<h1> xxxxxxx No se Elimino xxxxxxxxxxxx </h1>");
+             out.println("<a href='index.jsp'>Regresar...</a>");
+             }
+             }
             
             
             out.println("</body>");
             out.println("</html>");
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

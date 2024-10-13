@@ -4,8 +4,8 @@
  */
 package modelo;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;      
+import java.sql.SQLException;    
+
 import java.sql.PreparedStatement;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,12 +17,9 @@ public class Empleado extends Persona {
     
     private String codigo;
     private int id_puesto;
-    private Conexion cn;
+    Conexion cn;
     
-    public Empleado(String codigo, int id_puesto) {
-        this.codigo = codigo;
-        this.id_puesto = id_puesto;
-    }
+    
 
     public Empleado(){}
     public Empleado(String codigo, int id_puesto, int id, String nombres, String apellidos, String direccion, String telefono, String fecha_nacimiento) {
@@ -60,7 +57,7 @@ try{
     ResultSet consulta = cn.conexionBD.createStatement().executeQuery(query);
     String encabezado[]= {"id","codigo","nombres","apellidos","direccion","telefono","nacimiento","puesto","id_puesto"};
     tabla.setColumnIdentifiers(encabezado);
-    String datos[] = new String [9];
+    String datos[] = new String[9];
     while (consulta.next()){
         datos[0] = consulta.getString("id");
         datos[1] = consulta.getString("codigo");
@@ -108,10 +105,64 @@ return tabla;
             cn.cerrar_conexion();
         }catch(SQLException ex){
             System.out.println(ex.getMessage());
-            retorno = 0;
+            
+        }
+        
+        return retorno;
+    }
+    @Override
+    public int modificar(){
+        int retorno=0;
+        try{
+            PreparedStatement parametro;
+            cn = new Conexion();
+            String  query="UPDATE empleados set codigo=?,nombres=?,apellidos=?,direccion=?,telefono=?,fecha_nacimiento=?,id_puesto=? where id_empleados=?";
+            cn.abrir_conexion();
+            
+            parametro = (PreparedStatement)cn.conexionBD.prepareStatement(query);
+            parametro.setString(1,getCodigo());
+            parametro.setString(2,getNombres());
+            parametro.setString(3,getApellidos());
+            parametro.setString(4,getDireccion());
+            parametro.setString(5,getTelefono());
+            parametro.setString(6,getFecha_nacimiento());
+            
+            parametro.setInt(7,getId_puesto());
+            parametro.setInt(8,getId());
+            
+            
+            retorno = parametro.executeUpdate();
+            cn.cerrar_conexion();
+        }catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            
         }
         
         return retorno;
     }
     
+    @Override
+    public int eliminar (){
+        int retorno=0;
+        try{
+            PreparedStatement parametro;
+            cn = new Conexion();
+            String  query="DELETE FROM empleados where id_empleados=?";
+            cn.abrir_conexion();
+            
+            parametro = (PreparedStatement)cn.conexionBD.prepareStatement(query);
+           
+            parametro.setInt(1,getId());
+            
+            
+            retorno = parametro.executeUpdate();
+            cn.cerrar_conexion();
+        }catch(SQLException ex){
+            System.out.println(ex.getMessage());
+            
+        }
+        
+        return retorno;
+    }
 }
+
